@@ -1,6 +1,5 @@
 .DS_Store
-./vue-cli/node_modules
-./vue-form/node_modules
+node_modules
 /dist
 
 

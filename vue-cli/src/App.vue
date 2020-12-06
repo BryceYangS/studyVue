@@ -1,31 +1,28 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
-    <hello-world></hello-world>
+  <div>
+    <app-header v-bind:propsdata="str" v-on:renew="renewStr"></app-header>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import AppHeader from "./components/AppHeader.vue";
 
 export default {
-  name: 'App',
+  data: function () {
+    return {
+      str: "hahahahaha",
+    };
+  },
   components: {
-    // HelloWorld
-    'hello-world' : HelloWorld
-  }
-}
+    "app-header": AppHeader,
+  },
+  methods: {
+    renewStr: function () {
+      this.str = "renew";
+    },
+  },
+};
 </script>
 
 <style>
-
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
