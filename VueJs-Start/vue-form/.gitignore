@@ -1,9 +1,7 @@
 .DS_Store
-./VueJs-Start/vue-cli/node_modules
-./VueJs-Start/vue-form/node_modules
-./VueJs-Middle/vue-todo/node_modules
+node_modules
 /dist
-.history/
+
 
 # local env files
 .env.local
