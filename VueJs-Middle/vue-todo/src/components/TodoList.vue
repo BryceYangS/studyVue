@@ -1,13 +1,13 @@
 <template>
   <div>
     <ul>
-      <li
-        v-for="(todoItem, index) in todoItems"
-        v-bind:key="todoItem"
-        class="shadow"
-      >
-        <i class="fas fa-check checkBtn" v-on:click="toggleComplete"></i>
-        {{ todoItem }}
+      <li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem.item" class="shadow">
+        <i
+          class="checkBtn fas fa-check"
+          v-on:click="toggleComplete(todoItem, index)"
+          v-bind:class="{checkBtnCompleted: todoItem.completed}"
+        ></i>
+        <span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
         <span v-on:click="removeTodo(todoItem, index)" class="removeBtn">
           <i class="fas fa-trash-alt"></i>
         </span>
@@ -18,32 +18,39 @@
 
 <script scoped>
 export default {
-  data: function () {
+  data: function() {
     return {
-      todoItems: [],
+      todoItems: []
     };
   },
   methods: {
-    removeTodo: function (todoItem, index) {
+    removeTodo: function(todoItem, index) {
       console.log("todoItem : ", todoItem);
       console.log("index : ", index);
       localStorage.removeItem(todoItem);
       this.todoItems.splice(index, 1);
     },
-    toggleComplete: function () {},
+    toggleComplete: function(todoItem) {
+      todoItem.completed = !todoItem.completed;
+      //로컬 스토리지 데이터 갱신
+      localStorage.removeItem(todoItem.item);
+      localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
+    }
   },
-  created: function () {
+  created: function() {
     if (localStorage.length > 0) {
       for (var i = 0; i < localStorage.length; i++) {
         if (localStorage.key(i) === "loglevel:webpack-dev-server") continue;
-        this.todoItems.push(localStorage.key(i));
+        this.todoItems.push(
+          JSON.parse(localStorage.getItem(localStorage.key(i)))
+        );
       }
     }
-  },
+  }
 };
 </script>
 
-<style>
+<style scoped>
 ul {
   list-style-type: none;
   padding-left: 0px;

@@ -9,24 +9,24 @@
 
 <script>
 export default {
-  data: function () {
+  data: function() {
     return {
-      newTodoItem: "",
+      newTodoItem: ""
     };
   },
   methods: {
-    addTodo: function () {
+    addTodo: function() {
       if (this.newTodoItem !== "") {
-        var obj = { competed: false, item: this.newTodoItem };
+        var obj = { completed: false, item: this.newTodoItem };
         // 저장하는 로직
         localStorage.setItem(this.newTodoItem, JSON.stringify(obj));
         this.clearInput();
       }
     },
-    clearInput: function () {
+    clearInput: function() {
       this.newTodoItem = "";
-    },
-  },
+    }
+  }
 };
 </script>
 
