@@ -1,52 +1,38 @@
 <template>
   <div>
-    <ul>
-      <li v-for="(todoItem, index) in todoItems" v-bind:key="todoItem.item" class="shadow">
+    <transition-group name="list" tag="ul">
+      <li
+        v-for="(todoItem, index) in propsdata"
+        v-bind:key="todoItem.item"
+        class="shadow"
+      >
         <i
           class="checkBtn fas fa-check"
           v-on:click="toggleComplete(todoItem, index)"
-          v-bind:class="{checkBtnCompleted: todoItem.completed}"
+          v-bind:class="{ checkBtnCompleted: todoItem.completed }"
         ></i>
-        <span v-bind:class="{textCompleted: todoItem.completed}">{{ todoItem.item }}</span>
+        <span v-bind:class="{ textCompleted: todoItem.completed }">{{
+          todoItem.item
+        }}</span>
         <span v-on:click="removeTodo(todoItem, index)" class="removeBtn">
           <i class="fas fa-trash-alt"></i>
         </span>
       </li>
-    </ul>
+    </transition-group>
   </div>
 </template>
 
 <script scoped>
 export default {
-  data: function() {
-    return {
-      todoItems: []
-    };
-  },
+  props: ["propsdata"],
   methods: {
-    removeTodo: function(todoItem, index) {
-      console.log("todoItem : ", todoItem);
-      console.log("index : ", index);
-      localStorage.removeItem(todoItem);
-      this.todoItems.splice(index, 1);
+    removeTodo: function (todoItem, index) {
+      this.$emit("removeItem", todoItem, index);
     },
-    toggleComplete: function(todoItem) {
-      todoItem.completed = !todoItem.completed;
-      //로컬 스토리지 데이터 갱신
-      localStorage.removeItem(todoItem.item);
-      localStorage.setItem(todoItem.item, JSON.stringify(todoItem));
-    }
+    toggleComplete: function (todoItem, index) {
+      this.$emit("toggleItem", todoItem, index);
+    },
   },
-  created: function() {
-    if (localStorage.length > 0) {
-      for (var i = 0; i < localStorage.length; i++) {
-        if (localStorage.key(i) === "loglevel:webpack-dev-server") continue;
-        this.todoItems.push(
-          JSON.parse(localStorage.getItem(localStorage.key(i)))
-        );
-      }
-    }
-  }
 };
 </script>
 
@@ -71,6 +57,7 @@ li {
   line-height: 45px;
   color: #62acde;
   margin-right: 5px;
+  cursor: pointer;
 }
 .checkBtnCompleted {
   color: #b3adad;
@@ -83,5 +70,15 @@ li {
   margin-left: auto;
   color: #de4343;
   cursor: pointer;
+}
+
+/* 리스트 아이템 트랜지션 효과 */
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.6s;
+}
+.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
 }
 </style>
